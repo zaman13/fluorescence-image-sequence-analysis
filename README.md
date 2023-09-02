@@ -7,7 +7,7 @@
 </p>
 
 
-<img align = "right" src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/Figure_3.png" alt="alt text" width="600">
+<img align = "right" src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/Figure_3.png" alt="alt text" width="360">
 
 The code can process a tiff image stack and detect bright objects of arbitrary size and shape. It can calculate the brightness/intensity of those objects in each frame and produce a intensity vs time plot. The code can be used to analyze photobleaching rate. 
 
@@ -18,4 +18,5 @@ The code can process a tiff image stack and detect bright objects of arbitrary s
 
 
 # Sample Output
+<img align = "left" src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/image_2_c1.png" alt="alt text" width="600">
   
