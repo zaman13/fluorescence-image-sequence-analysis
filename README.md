@@ -15,7 +15,7 @@ The code can process a tiff image stack and detect bright objects of arbitrary s
 
 # Features
 - Can handle multiple objects in a frame
-
+- Can dynamically adjust the mask every frame to account for object drift
 
 # Sample Output
 The following figure shows the average fluorescence intensity vs time plot. A time series image set containing multiple beads is used as the input data.
