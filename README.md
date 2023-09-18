@@ -18,6 +18,7 @@ The code can process a tiff image stack and detect bright objects of arbitrary s
 - Can handle irregularly shaped objects
 - Can dynamically adjust the mask every frame to account for object drift
 - Average birghtness of all the detected beads in the frames are calculated
+- Can handle a single tiff file containing image sequences, or a series of tiff images located in a folder (work in progress) 
   
 
 # Sample Output
