@@ -30,7 +30,7 @@ from scipy.optimize import curve_fit
 
 
 # import custom functions
-from func_fl import *
+from func_fl_v5 import *
 
 
 
