@@ -16,7 +16,9 @@ Sept. 25, 2023
 Sept. 26, 2023
     - Fixed cmap range issues when plotting and exporting images
     - Ehnanced low light detection sensitivity
-    
+
+Sept. 28, 2023
+    - Add labels on the submasks    
 """
 
 import numpy as np
@@ -61,8 +63,8 @@ def object_mask_find(img,blur_order,th_factor):
     # im_mask = (im_blur > th)                  # bead mask
     # return im_mask
     
-    block_size = 61                  # 41 for 50mers 
-    mean_subtract = -0.5             # -0.5 for 50mers
+    block_size = 91                  # 41 for 50mers 
+    mean_subtract = -0.2             # -0.5 for 50mers
     
     # Do type conversion (for mask finding only) if needed. cv.adaptiveThreshold does not work for 16 bit images
     # Note that the image iteself remains 16bit during other parts of the processing. 
@@ -72,7 +74,10 @@ def object_mask_find(img,blur_order,th_factor):
     im_blur = cv2.medianBlur(img, blur_order) 
     
     
-    thresh1 = cv2.adaptiveThreshold(im_blur,1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, mean_subtract)
+    # thresh1 = cv2.adaptiveThreshold(im_blur,1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, mean_subtract)
+
+    thresh1 = cv2.adaptiveThreshold(im_blur,1, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, block_size, mean_subtract)
+
     
     return thresh1
 # =============================================================================
@@ -304,18 +309,21 @@ def analyze_images(path_ext, path_out, th_factor):
                 # cropped.save('L_2d_cropped.png')
                 
                 py.imshow(im_tmp, cmap = cmp)
+                py.text(iB[2]+2, iB[0]+2, str(m), fontsize = 12, color = 'w')
+                
                 py.ylim([iB[0],iB[1]])
                 py.xlim([iB[2],iB[3]])
                 py.clim(bmn,bmx)
                 py.axis('off')
                 py.suptitle(files_list[im_ind])
                 
+               
                 py.figure(36)
                 yt = [iB[0], iB[1], iB[1], iB[0], iB[0]]
                 xt = [iB[2], iB[2], iB[3], iB[3], iB[2]]
                 
                 py.plot(xt,yt,'r', linewidth = 0.5)
-                
+                py.text(iB[2]-2, iB[0]-2, str(m), fontsize = 6, color = 'w')
                 
                 
                 # =============================================================================
