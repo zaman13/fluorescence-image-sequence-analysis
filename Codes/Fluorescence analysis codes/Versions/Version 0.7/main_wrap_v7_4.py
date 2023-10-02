@@ -25,7 +25,7 @@ import matplotlib.pyplot as py
 import os
 import cv2
 import time
-
+import datetime
 
 
 from scipy.optimize import curve_fit
@@ -62,10 +62,19 @@ def fit_func(x, m, c):
 
 
 
+# Start log with current date time
+now = datetime.datetime.now()
+print_log('******************************************************************')
+print_log('******************************************************************')
+print_log(now)
+print_log('******************************************************************')
+print_log('******************************************************************')
 # =============================================================================
 # Control parameters
 # =============================================================================
 
+export_data = 'y'  # whether to export data or not
+export_file_name = 'dataset_x_fl_out.csv'
 fit_line = 'y'     # whether or not to fit a line through the data and plot
 
 # =============================================================================
@@ -82,6 +91,8 @@ fit_line = 'y'     # whether or not to fit a line through the data and plot
 
 # x_data =  [50.0, 100.0, 150.0]    # x-axis variable (sampele types/datasets)
 # xp_data = [25,100,200]           # x-axis data for plotting the fit function
+
+
 
 x_data =  [1,2,3]    # x-axis variable (sampele types/datasets)
 xp_data = [0,2,4]           # x-axis data for plotting the fit function
@@ -249,7 +260,14 @@ for m in range(len(folder)):
 # =============================================================================
 
 
-
+# =============================================================================
+# Export data
+# =============================================================================
+if export_data == 'y':
+    df = pd.DataFrame(fl_data_store).T
+    df.columns = folder
+    df.to_csv(export_file_name)
+# =============================================================================
 
 el_t = time.time()- st_t
 print_log('\nRun time = %.1f sec \n' % el_t)
