@@ -16,6 +16,12 @@ Sept. 25, 2023
 Sept. 26, 2023
     - Fixed cmap range issues when plotting and exporting images
     - Ehnanced low light detection sensitivity
+
+Sept. 28, 2023
+    - Added labels on the submasks    
+    
+Sept. 29, 2023
+    - Added skew rejection to remvoe noise    
     
 """
 
@@ -28,6 +34,7 @@ import pandas as pd
 from PIL import Image as PIL_Image
 
 from skimage import measure
+from scipy.stats import kurtosis, skew
 
 import glob
 
@@ -61,8 +68,8 @@ def object_mask_find(img,blur_order,th_factor):
     # im_mask = (im_blur > th)                  # bead mask
     # return im_mask
     
-    block_size = 61                  # 41 for 50mers 
-    mean_subtract = -0.5             # -0.5 for 50mers
+    block_size = 91                  # 41 for 50mers 
+    mean_subtract = -0.2             # -0.5 for 50mers
     
     # Do type conversion (for mask finding only) if needed. cv.adaptiveThreshold does not work for 16 bit images
     # Note that the image iteself remains 16bit during other parts of the processing. 
@@ -72,7 +79,10 @@ def object_mask_find(img,blur_order,th_factor):
     im_blur = cv2.medianBlur(img, blur_order) 
     
     
-    thresh1 = cv2.adaptiveThreshold(im_blur,1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, mean_subtract)
+    # thresh1 = cv2.adaptiveThreshold(im_blur,1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, block_size, mean_subtract)
+
+    thresh1 = cv2.adaptiveThreshold(im_blur,1, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, block_size, mean_subtract)
+
     
     return thresh1
 # =============================================================================
@@ -158,13 +168,53 @@ def mask_fragment(img,obj_size_th_factor ):
 
 # =============================================================================
 
+def skew_refine(smasks):
+    
+    sk_th = 0.1
+    N = np.shape(smasks)[2]
+    N_refined = 0
+    ind = []
+    for m in range(N):
+        ims = smasks[:,:,m]                # select a submask
+        
+        iB = bbox2(ims)                     # calculate bounding box around the detected bead
+                                           # calculate bounding box around the detected bead
+        
+        im_crop = ims[iB[0]:iB[1],iB[2]:iB[3]]  
+        
+        sk = skew(im_crop,axis = None) 
+        if sk < sk_th:
+            N_refined = N_refined + 1 
+            ind.append(m)
+        else:
+            print('Skew rejection, s = %1.2f' % sk)
+            
+    smask_r = np.zeros([np.shape(ims)[0],np.shape(ims)[1],N_refined])  # initialize array of image arrays where submasks will be stored
+    mask_r = np.zeros(np.shape(ims))
+    for m in range(N_refined):
+        smask_r[:,:,m] = smasks[:,:,ind[m]]
+        mask_r = mask_r + smask_r[:,:,m]
+   
+    print('Number of objects refined (K), N_obj_refined = %i' %(N_refined))
+
+    return smask_r, mask_r
+# =============================================================================
+
+
+
+# =============================================================================
 
 def bbox1(img):
     a = np.where(img != 0)
     bbox = np.min(a[0])-4, np.max(a[0])+4, np.min(a[1])-4, np.max(a[1])+4
     return bbox
+# =============================================================================
 
-
+def bbox2(img):
+    a = np.where(img != 0)
+    bbox = np.min(a[0]), np.max(a[0]), np.min(a[1]), np.max(a[1])
+    return bbox
+# =============================================================================
 
 
 
@@ -201,7 +251,7 @@ def analyze_images(path_ext, path_out, th_factor):
     
     N_plot_row = 3                    # Number of rows in the subplot when plotting the detected object at each frame
     blur_order = 5                    # Order of the median blur
-    obj_size_th_factor = 0.2          # for composite mask from fragments, size of object to include = max_size * obj_size_th_factor 
+    obj_size_th_factor = (0.35)**2     # for composite mask from fragments, size of object to include = max_size * obj_size_th_factor. Note that obj_size is defined in terms of 2D pixel count which is equivalent to area. (0.2 before)
     
     im_box_border = 4                 # Amount of offset pixesl at each side when displaying image of a single bead 
     
@@ -263,6 +313,9 @@ def analyze_images(path_ext, path_out, th_factor):
                 continue
             
             smasks, smasks_f, mask_r = mask_fragment(im_mask,obj_size_th_factor )    # mask fragment and composite reforming
+            
+            smasks_f, mask_r = skew_refine(smasks_f)
+                         
             # print_log(np.shape(smasks_f[:,:,0]))
             print_log('Submasking done')
             Nsub_masks = np.shape(smasks_f)[2]
@@ -304,18 +357,21 @@ def analyze_images(path_ext, path_out, th_factor):
                 # cropped.save('L_2d_cropped.png')
                 
                 py.imshow(im_tmp, cmap = cmp)
+                py.text(iB[2]+2, iB[0]+2, str(m), fontsize = 12, color = 'w')
+                
                 py.ylim([iB[0],iB[1]])
                 py.xlim([iB[2],iB[3]])
                 py.clim(bmn,bmx)
                 py.axis('off')
                 py.suptitle(files_list[im_ind])
                 
+               
                 py.figure(36)
                 yt = [iB[0], iB[1], iB[1], iB[0], iB[0]]
                 xt = [iB[2], iB[2], iB[3], iB[3], iB[2]]
                 
                 py.plot(xt,yt,'r', linewidth = 0.5)
-                
+                py.text(iB[2]-2, iB[0]-2, str(m), fontsize = 6, color = 'w')
                 
                 
                 # =============================================================================

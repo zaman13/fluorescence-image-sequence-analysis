@@ -25,7 +25,7 @@ import matplotlib.pyplot as py
 import os
 import cv2
 import time
-
+import datetime
 
 
 from scipy.optimize import curve_fit
@@ -62,10 +62,19 @@ def fit_func(x, m, c):
 
 
 
+# Start log with current date time
+now = datetime.datetime.now()
+print_log('******************************************************************')
+print_log('******************************************************************')
+print_log(now)
+print_log('******************************************************************')
+print_log('******************************************************************')
 # =============================================================================
 # Control parameters
 # =============================================================================
 
+export_data = 'y'  # whether to export data or not
+export_file_name = 'dataset_x_fl_out.csv'
 fit_line = 'y'     # whether or not to fit a line through the data and plot
 
 # =============================================================================
@@ -78,14 +87,20 @@ fit_line = 'y'     # whether or not to fit a line through the data and plot
 # x_data =  [100.0,200.0,300.0]    # x-axis variable (sampele types/datasets)
 # xp_data = [50,100,400]           # x-axis data for plotting the fit function
 
-# x_data2 =  [50.0, 100.0, 150.0]    # x-axis variable (sampele types/datasets)
+# x_data2 =  [50.0, 100.0, 150.0]  # x-axis variable (sampele types/datasets)
 
-x_data =  [50.0, 100.0, 150.0]    # x-axis variable (sampele types/datasets)
-xp_data = [25,100,200]           # x-axis data for plotting the fit function
+# x_data =  [50.0, 100.0, 150.0]    # x-axis variable (sampele types/datasets)
+# xp_data = [25,100,200]           # x-axis data for plotting the fit function
+
+
+
+x_data =  [1,2,3]    # x-axis variable (sampele types/datasets)
+xp_data = [0,2,4]           # x-axis data for plotting the fit function
+x_data2 = x_data
 
 # th_factor_set = [0.6, 0.6, 0.5]
-th_factor_set = [0.4, 0.4, 0.4]
-# th_factor_set = [0.4, 0.4, 0.4, 0.6, 0.6, 0.5]
+# th_factor_set = [0.4, 0.4, 0.4]
+th_factor_set = [0.4, 0.4, 0.4, 0.6, 0.6, 0.5]
 
 
 path_main = 'Data/'
@@ -95,14 +110,17 @@ path_main = 'Data/'
 # folder = ['50_50','50_100', '50_150']
 # folder = ['100_100','100_200', '100_300','100_100c','100_200c', '100_300c']
 # folder = ['100_100','100_200', '100_300','50_50','50_100', '50_150']
-folder = ['50x1','50x2', '50x3']
+# folder = ['50x1','50x2', '50x3']
 # folder = ['100x1','100x2', '100x3']
+# folder = ['100x2']
 
+folder = ['100x1','100x2', '100x3','50x1','50x2', '50x3']
 # scale_factor = [1]
 # scale_factor = [4,8]
 # scale_factor = [1,4,8]
 # scale_factor = [1,4,8,1,1,1]
-scale_factor = [1,1,1]
+# scale_factor = [1,1,1]
+scale_factor = [1,1,1,1,1,1]
 
 
 
@@ -110,9 +128,9 @@ scale_factor = [1,1,1]
 # ttl = 'Benchtop reaction with 50mers'
 # ttl = 'Benchtop reaction with 100mers'
 ttl = 'Benchtop reactions'
-# lb1 = '100mer'
-# lb2 = '50mer'
-lb1 = '50mer'
+lb1 = '100mer'
+lb2 = '50mer'
+# lb1 = '50mer'
 
 
 
@@ -187,13 +205,13 @@ if fit_line == 'y':
     # =============================================================================
     # Split data (full images and cropped datasets) and separate curve fittings for each split
     # =============================================================================
-    # ydata1 = fl_data_mean[0:3]
-    # ydata2 = fl_data_mean[3:6]
-    ydata1 = fl_data_mean
+    ydata1 = fl_data_mean[0:3]
+    ydata2 = fl_data_mean[3:6]
+    # ydata1 = fl_data_mean
     
     
     popt1, pcov1 = curve_fit(fit_func, x_data, ydata1)
-    # popt2, pcov2 = curve_fit(fit_func, x_data2, ydata2)
+    popt2, pcov2 = curve_fit(fit_func, x_data2, ydata2)
     
     # =============================================================================
     
@@ -203,15 +221,15 @@ if fit_line == 'y':
     
     
     py.plot(xp_data, fit_func(xp_data, *popt1), color = '#ff9001')
-    # py.plot(xp_data, fit_func(xp_data, *popt2), color = '#7d98a1')
+    py.plot(xp_data, fit_func(xp_data, *popt2), color = '#7d98a1')
     
     py.plot(x_data, ydata1,'o',color = '#d35100', markeredgecolor = '#151515', label = lb1)
-    # py.plot(x_data2, ydata2,'s',color = '#3F6385', markeredgecolor = '#151515', label = lb2)
+    py.plot(x_data2, ydata2,'s',color = '#3F6385', markeredgecolor = '#151515', label = lb2)
     # py.xlim([0,320])
     # py.ylim([0,680])
     py.legend()
     
-    py.xlabel('Strand length')
+    py.xlabel('Cycle number')
     py.ylabel('Intensity (a.u)')
     py.title(ttl)
     
@@ -227,22 +245,29 @@ if fit_line == 'y':
 # =============================================================================
 clr = py.cm.Pastel2.colors
 
-binwidth_set = [40,80,80]
+binwidth_set = [40,80,80, 40,80,80]
 py.figure()
 for m in range(len(folder)):
     data = fl_data_store[m]
     binwidth = binwidth_set[m]
     py.subplot(len(folder),1,m+1)
     py.hist(data, bins=range(int(min(data)), int(max(data)) + binwidth, binwidth), edgecolor = 'k',alpha = 0.5,label = folder[m],orientation = 'vertical', color = clr[m])
-    py.xlabel('Count')
-    py.ylabel('Intensity (a.u.)')
+    py.ylabel('Count')
+    py.xlabel('Intensity (a.u.)')
     py.legend()
     py.xlim([d_min, d_max])
 
 # =============================================================================
 
 
-
+# =============================================================================
+# Export data
+# =============================================================================
+if export_data == 'y':
+    df = pd.DataFrame(fl_data_store).T
+    df.columns = folder
+    df.to_csv(export_file_name)
+# =============================================================================
 
 el_t = time.time()- st_t
 print_log('\nRun time = %.1f sec \n' % el_t)
