@@ -27,7 +27,20 @@ The photobleaching code can process a tiff image stack and detect bright objects
   
 
 # Sample Output
+
+
+
+## Bead detection and fluorescence analysis:
+
+The following figure shows detection of individual beads in a frame. 
+
+<img src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/sample_out.png"  width="800">
+
+
+
+
+## Photobleaching:
+
 The following figure shows the average fluorescence intensity vs time plot. A time series image set containing multiple beads is used as the input data. 
 
-<img align = "left" src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/image_2_c1.png" alt="alt text" width="600">
-  
+  <img src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/image_2_c1.png" alt="alt text" width="600">
