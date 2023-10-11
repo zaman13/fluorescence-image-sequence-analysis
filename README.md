@@ -15,13 +15,15 @@ The photobleaching code can process a tiff image stack and detect bright objects
 
 
 
-# Features
+# Features of the photobleach analysis code
 - Can handle multiple objects in a frame
 - Can handle irregularly shaped objects
 - Can dynamically adjust the mask every frame to account for object drift
 - Average birghtness of all the detected beads in the frames are calculated
-- Can handle a single tiff file containing image sequences, or a series of tiff images located in a folder (work in progress)
-- 
+
+# Features of the avarage brightness analysis code  
+- Can handle a series of tiff images located in a folder
+- Can work with 16bit tiff images
   
 
 # Sample Output
