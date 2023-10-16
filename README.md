@@ -3,7 +3,7 @@
 <p float="left">
 <a href = "https://github.com/zaman13/fluorescence-image-sequence-analysis/tree/main/Codes"> <img src="https://img.shields.io/badge/Language-Python-blue" alt="alt text"> </a>
 <a href = "https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/LICENSE"> <img src="https://img.shields.io/badge/License-MIT-green" alt="alt text"></a>
-<a href = "[https://github.com/zaman13/Poisson-solver-2D/tree/master/Code](https://github.com/zaman13/fluorescence-image-sequence-analysis/tree/main/Codes)"> <img src="https://img.shields.io/badge/Version-1.3-red" alt="alt text"> </a>
+<a href = "[https://github.com/zaman13/Poisson-solver-2D/tree/master/Code](https://github.com/zaman13/fluorescence-image-sequence-analysis/tree/main/Codes)"> <img src="https://img.shields.io/badge/Version-0.8-red" alt="alt text"> </a>
 </p>
 
 
