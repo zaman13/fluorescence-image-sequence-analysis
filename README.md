@@ -9,6 +9,8 @@
 
 <img align = "right" src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/13-02.1..png" alt="alt text" width="460">
 
+#### Developed at Hesselink lab
+
 Two separate applications are included in this repository. The first one is analysis of photobleaching from a timeseries image set. The second one is calculating the average brightness of beads/samples from a set of image.  
 
 The photobleaching code can process a tiff image stack and detect bright objects of arbitrary size and shape. It can calculate the brightness/intensity of those objects in each frame and produce a intensity vs time plot. The code can be used to analyze photobleaching rate. 
