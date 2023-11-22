@@ -9,7 +9,6 @@
 
 <img align = "right" src="https://github.com/zaman13/fluorescence-image-sequence-analysis/blob/main/Sample%20output/13-02.1..png" alt="alt text" width="460">
 
-#### Developed at Hesselink lab
 
 Two separate applications are included in this repository. The first one is analysis of photobleaching from a timeseries image set. The second one is calculating the average brightness of beads/samples from a set of image.  
 
@@ -49,5 +48,5 @@ The following figure shows the average fluorescence intensity vs time plot. A ti
 
 
 ## Acknowledgement
- This work was partially supported by the National Institute of Health (NIH) Grant R01GM138716 and 5R21HG009758.
+This work was developed at the Hesselink research lab, Stanford University. The work was partially supported by the National Institute of Health (NIH) Grant R01GM138716 and 5R21HG009758.
 
