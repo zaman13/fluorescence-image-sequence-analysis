@@ -32,7 +32,7 @@ from scipy.optimize import curve_fit
 from ascii_magic import AsciiArt, Back
 
 # import custom functions
-from func_fl_single_img import *
+from func_fl_single_img_v1_1 import *
 
 
 
