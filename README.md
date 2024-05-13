@@ -20,6 +20,7 @@ A program for calculating the average brightness of beads/samples from a set of 
 - Can handle a series of tiff images located in a folder
 - Can work with 16bit tiff images
 - Adaptive thresholding is used for masking
+- Custom 16 bit adaptive thresholding algorithm
 
 ## Library requirements
 - Opencv
