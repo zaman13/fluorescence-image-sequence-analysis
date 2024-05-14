@@ -1,4 +1,4 @@
-# Fluorescence Image-Sequence Analysis
+# Fluorescence Image Analysis
 
 <p float="left">
 <a href = "https://github.com/zaman13/fluorescence-image-sequence-analysis/tree/main/Codes"> <img src="https://img.shields.io/badge/Language-Python-blue" alt="alt text"> </a>
@@ -17,7 +17,7 @@ A program for calculating the average brightness of beads/samples from a set of 
 
 
 ## Features of the avarage brightness analysis code  
-- Can handle a series of tiff images located in a folder
+- Can handle a single image or a series of tiff images located in a folder
 - Can work with 16bit tiff images
 - Adaptive thresholding is used for masking
 - Custom 16 bit adaptive thresholding algorithm
