@@ -34,8 +34,8 @@ from scipy.optimize import curve_fit
 st = time.time()
 
 # import custom functions
-from func_fl_single_img import *
-
+from func_fl_single_img_v1_4 import *
+# from func_fl_single_img_v1_5 import *
 
 
 

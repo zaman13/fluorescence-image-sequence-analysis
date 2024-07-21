@@ -31,11 +31,8 @@ import datetime
 from scipy.optimize import curve_fit
 # from ascii_magic import AsciiArt, Back
 
-st = time.time()
-
 # import custom functions
-from func_fl_single_img import *
-
+from func_fl_single_img_v1_4 import *
 
 
 
@@ -54,8 +51,8 @@ from func_fl_single_img import *
 
 
 
-th_factor = -0.1
-block_size = 41
+th_factor = 0.1
+block_size = 81
 
 path_main = ''
 folder = ['Test img']
@@ -100,7 +97,6 @@ cmp = 'magma'
 # path_full = path_main + folder[m] + '/*.tif'        # full path
 m = 0
 path_full = path_main + folder[m] + '/1.tif'        # full path
-path_full = path_main + folder[m] + '/3.tif'        # full path
 path_out = path_main + folder[m]
 
 
@@ -130,10 +126,7 @@ o_mean, o_size, b_mean, x_store, y_store, iB_store = single_img_analysis(path_fu
 
 py.show()
 
-en = time.time()
 
-
-print('Run time = %1.2f sec' %(en-st))
 # my_art = AsciiArt.from_image(path_out + '/out_crop.png')
 # my_output = my_art.to_ascii(columns=200, monochrome = True)
 # print(my_output)

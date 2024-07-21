@@ -46,10 +46,6 @@ May 7, 2024
 July 8, 2024
     - Added data export and histogram image export
     - Included median and mode in the export data matrix
-
-July 20, 2024
-    - Auto invert of adaptive threshold for analyzing bright field images. This is based upon the th_factor parameter.
-      th_factor > 0 for fluorescence images, and th_factor < 0 for bright field images.
     
 """
 
@@ -65,16 +61,12 @@ from PIL import Image as PIL_Image
 from skimage import measure
 from scipy.stats import kurtosis, skew
 
-
 import glob
 
 import random
 
 
 import os
-
-
-
 
 
 # =============================================================================
@@ -122,18 +114,6 @@ def adaptive_threshold_16bit(img, blur_order, block_size, mean_th_fct):
     # mask = imgM > (blur_avg - const_C)
     
     mask = imgM > ((1+mean_th_fct)*blur_avg) 
-    
-    # July 20, 2024: Smart masking.Invert mask automatically depending on whether most of the region of the mask is bright or dark.
-    # In this way, the algorithm can automatically detect between brightfield or fluorescence image and adjust the mask accordingly.
-    # This "smart" method will probably cause issues. Much better to use a dumber approach.
-    
-    # if sum(sum(mask)) > np.size(mask)/2: # if there are more ones than zeros
-        # mask = np.invert(mask)
-    
-    # July 20, 2024: More simple version
-    if mean_th_fct < 0:
-        mask = np.invert(mask)
-        
     return mask
 # =============================================================================
 
@@ -169,7 +149,6 @@ def mask_fragment(img,obj_size_th_factor ):
     
     
     sub_masks = np.zeros([np.shape(img)[0],np.shape(img)[1],N_obj])  # array of image arrays. A mask for each detected object.
-  
     obj_size_sum = np.zeros(N_obj)     # initialization. The array will store size of each submask.
     
     for m in range(N_obj):             # loop through each object
@@ -177,8 +156,6 @@ def mask_fragment(img,obj_size_th_factor ):
         uu[idx[m]] = 1                 # populate uu   
         obj_size_sum[m] = np.sum(uu)   # size of the object. Defined by the number of ones.
         sub_masks[:,:,m] = uu          # store the submask
-        
-     
         
         # py.subplot(3,int(np.ceil(N_obj/3)),m+1)
         # py.imshow(sub_masks[:,:,m])
@@ -418,8 +395,7 @@ def analyze_images(fpath, path_out, block_size, th_factor):
         print_log('\n================File Error=============\n')
         print_log(fpath)
         print_log('Skipping file and moving to next file \n\n')
-        # mean_store, median_store, mode_store, size_store, b_mean, x_store, y_store, iB_store
-        return 0, 0, 0, 0, 0, 0, 0, 0
+        return 0
     
     smasks, smasks_f, mask_r = mask_fragment(im_mask,obj_size_th_factor )    # mask fragment and composite reforming
     
@@ -713,8 +689,8 @@ def single_img_analysis(fpath, path_out, block_size, th_factor):
         data_frame_out = pd.DataFrame(data = Mdata_out, columns = header_str)  # convert numpy matrix to pandas dataframe
         # np.savetxt(p + 'data.csv', Mdata_out, delimiter=",")   # save numpy output matrix
         data_frame_out.to_csv(p + 'data.csv', index=True)        # save pandas output data frame
-    except:
-        print_log('Could not create/save data frame')
+   except:
+       print_log('Could no
     
     # plot histograme
     py.figure()
