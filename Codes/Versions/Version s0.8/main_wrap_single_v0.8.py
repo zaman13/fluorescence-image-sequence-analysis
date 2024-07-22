@@ -34,7 +34,7 @@ from scipy.optimize import curve_fit
 st = time.time()
 
 # import custom functions
-from func_fl_single_img_v1_4 import *
+from func_fl_single_img_v1_5 import *
 # from func_fl_single_img_v1_5 import *
 
 
@@ -54,8 +54,8 @@ from func_fl_single_img_v1_4 import *
 
 
 
-th_factor = -0.1
-block_size = 41
+th_factor = 0.2
+block_size = 81
 
 path_main = ''
 folder = ['Test img']
@@ -99,8 +99,8 @@ cmp = 'magma'
 
 # path_full = path_main + folder[m] + '/*.tif'        # full path
 m = 0
-path_full = path_main + folder[m] + '/1.tif'        # full path
-path_full = path_main + folder[m] + '/3.tif'        # full path
+# path_full = path_main + folder[m] + '/1.tif'        # full path
+path_full = path_main + folder[m] + '/2.tif'        # full path
 path_out = path_main + folder[m]
 
 
